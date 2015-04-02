@@ -31,7 +31,7 @@ end
 
 command = ARGV
 # Use `direnv exec` if exists direnv and .envrc
-if which("direnv")
+if which("direnv") && File.exist?(".envrc")
   command = ["direnv", "exec", "."] + command
 end
 
