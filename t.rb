@@ -35,6 +35,11 @@ if which("direnv") && File.exist?(".envrc")
   command = ["direnv", "exec", "."] + command
 end
 
+# Use `reattach-to-user-namespace` if exists
+if which("reattach-to-user-namespace")
+  command = ["reattach-to-user-namespace"] + command
+end
+
 # Convert environ to inline
 # (because tmux new-window reset environments)
 env = ENV.reject{|k, v| k == "_"}.map{|kv| kv.map(&:shellescape).join("=") }
