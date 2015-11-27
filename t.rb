@@ -19,7 +19,7 @@ end
 
 # If no arguments, exec tmux new-window
 unless executable = ARGV.first
-  exec("tmux", "new-window")
+  exec("iterm-new-session")
 end
 
 # Check whether command exists
@@ -35,15 +35,10 @@ if which("direnv") && File.exist?(".envrc")
   command = ["direnv", "exec", "."] + command
 end
 
-# Use `reattach-to-user-namespace` if exists
-if which("reattach-to-user-namespace")
-  command = ["reattach-to-user-namespace"] + command
-end
-
 # Convert environ to inline
 # (because tmux new-window reset environments)
 env = ENV.reject{|k, v| k == "_"}.map{|kv| kv.map(&:shellescape).join("=") }
 command_with_env = env.join(" ") + " " + command.shelljoin
 puts command_with_env if debug
 
-exec("tmux", "new-window", "-n", name, command_with_env)
+exec("iterm-new-session", "-n", name, command_with_env)
